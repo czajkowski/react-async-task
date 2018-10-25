@@ -1,0 +1,18 @@
+{
+    "env": {
+        "jest": true
+    },
+    "extends": ["airbnb"],
+    "rules": {
+        "indent": [2, 4],
+        "complexity": [2, { "max": 5 }],
+        "no-use-before-define": [2, {
+            "functions": false,
+            "classes": false,
+            "variables": false
+        }],
+        "object-curly-newline": [0],
+        "react/require-default-props": "off",
+    },
+    "parser": "babel-eslint"
+}
