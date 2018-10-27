@@ -1,11 +1,25 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+const childrenPropTypes = PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func,
+]);
+
 const isFunction = fn => typeof fn === 'function';
+
+const renderChildren = (children, ...rest) => {
+    if (isFunction(children)) {
+        return children(...rest);
+    }
+
+    return children;
+};
+
 const { Consumer, Provider } = React.createContext();
 
-const STATUS = {
-    Loading: 'loading',
+export const Status = {
+    Pending: 'pending',
     Resolved: 'resolved',
     Rejected: 'rejected',
 };
@@ -15,7 +29,8 @@ const createTask = (task) => {
 
     class AsyncTask extends Component {
         static propTypes = {
-            children: PropTypes.node,
+            children: childrenPropTypes,
+            data: PropTypes.any,
         };
 
         mounted = false;
@@ -23,12 +38,30 @@ const createTask = (task) => {
         state = {
             data: null,
             error: null,
-            status: STATUS.Loading,
+            status: Status.Pending,
         };
 
         componentDidMount() {
             this.mounted = true;
-            this.runTask();
+
+            const { data } = this.props;
+
+            this.runTask(data);
+        }
+
+        shouldComponentUpdate({ data: newData }, { status: newStatus }) {
+            const { data } = this.props;
+            const { status } = this.state;
+
+            if (status !== newStatus) {
+                return true;
+            }
+
+            if (data !== newData) {
+                this.runTask(newData);
+            }
+
+            return false;
         }
 
         componentWillUnmount() {
@@ -39,7 +72,7 @@ const createTask = (task) => {
             if (this.mounted && id === taskId) {
                 this.setState({
                     data,
-                    status: STATUS.Resolved,
+                    status: Status.Resolved,
                 });
             }
         }
@@ -48,77 +81,83 @@ const createTask = (task) => {
             if (this.mounted && id === taskId) {
                 this.setState({
                     error,
-                    status: STATUS.Rejected,
+                    status: Status.Rejected,
                 });
             }
         }
 
-        runTask() {
+        runTask(data) {
             id += 1;
 
-            Promise
-                .resolve()
-                .then(() => task(this.props))
-                .then(this.onResolve(id))
-                .catch(this.onReject(id));
+            const { status } = this.state;
+            if (status !== Status.Pending) {
+                this.setState({
+                    error: null,
+                    data: null,
+                    status: Status.Pending,
+                });
+            }
+
+            Promise.resolve(task(data))
+                .then(this.onResolved(id))
+                .catch(this.onRejected(id));
         }
 
         render() {
             const { children } = this.props;
 
-            if (isFunction(children)) {
-                return <Provider value={this.state}>{children(this.state)}</Provider>;
-            }
-
             if (children) {
-                return <Provider value={this.state}>{children}</Provider>;
+                return (
+                    <Provider value={this.state}>
+                        {renderChildren(children, this.state)}
+                    </Provider>
+                );
             }
 
             return null;
         }
     }
 
-    AsyncTask.Loading = ({ children }) => (
+    AsyncTask.Pending = ({ children }) => (
         <Consumer>
             {({ status }) => {
-                if (status === STATUS.Loading) {
-                    return isFunction(children) ? children() : children;
+                if (status === Status.Pending) {
+                    return renderChildren(children);
                 }
                 return null;
             }}
         </Consumer>
     );
-    AsyncTask.Loading.propTypes = {
-        children: PropTypes.node,
+    AsyncTask.Pending.propTypes = {
+        children: childrenPropTypes,
     };
-
 
     AsyncTask.Resolved = ({ children }) => (
         <Consumer>
             {({ status, data }) => {
-                if (status === STATUS.Resolved) {
-                    return isFunction(children) ? children(data) : children;
+                if (status === Status.Resolved) {
+                    return renderChildren(children, data);
                 }
                 return null;
             }}
         </Consumer>
     );
     AsyncTask.Resolved.propTypes = {
-        children: PropTypes.node,
+        children: childrenPropTypes,
     };
 
     AsyncTask.Rejected = ({ children }) => (
         <Consumer>
             {({ status, error }) => {
-                if (status === STATUS.Rejected) {
-                    return isFunction(children) ? children(error) : children;
+                if (status === Status.Rejected) {
+                    return renderChildren(children, error);
                 }
                 return null;
             }}
         </Consumer>
     );
     AsyncTask.Rejected.propTypes = {
-        children: PropTypes.node,
+        children: childrenPropTypes,
     };
 
     return AsyncTask;

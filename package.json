@@ -1,61 +1,67 @@
 {
-  "name": "react-async-task",
-  "version": "0.0.1",
-  "description": "",
-  "main": "dist/index.js",
-  "scripts": {
-    "test": "jest && npm run lint",
-    "test:watch": "jest --watch",
-    "build": "rm -rf ./dist && webpack --config webpack.config.js",
-    "lint": "eslint --ext .js,.jsx ./src",
-    "lint:fix": "eslint --fix --ext .js,.jsx ./src"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/czajkowski/react-async-task.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/czajkowski/react-async-task/issues"
-  },
-  "homepage": "https://github.com/czajkowski/react-async-task#readme",
-  "dependencies": {
-    "enzyme": "^3.7.0",
-    "prop-types": "^15.6.2",
-    "react": "^16.6.0"
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.1.2",
-    "@babel/core": "^7.1.2",
-    "@babel/plugin-proposal-class-properties": "^7.1.0",
-    "@babel/preset-env": "^7.1.0",
-    "@babel/preset-react": "^7.0.0",
-    "babel-core": "^7.0.0-bridge.0",
-    "babel-eslint": "^10.0.1",
-    "babel-jest": "^23.6.0",
-    "babel-loader": "^8.0.4",
-    "eslint": "^5.7.0",
-    "eslint-config-airbnb": "^17.1.0",
-    "eslint-plugin-babel": "^5.2.1",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-jsx-a11y": "^6.1.2",
-    "eslint-plugin-react": "^7.11.1",
-    "jest": "^22.4.4",
-    "webpack": "^4.20.2",
-    "webpack-cli": "^3.1.2"
-  },
-  "jest": {
-    "verbose": true,
-    "coverageThreshold": {
-      "global": {
-        "branches": 85,
-        "functions": 85,
-        "lines": 85,
-        "statements": 85
-      }
+    "name": "react-async-task",
+    "version": "0.0.1",
+    "description": "",
+    "main": "dist/index.js",
+    "scripts": {
+        "test": "jest && npm run lint",
+        "test:watch": "jest --watch",
+        "build": "rm -rf ./dist && webpack --config webpack.config.js",
+        "lint": "eslint --ext .js,.jsx ./src",
+        "lint:fix": "eslint --fix --ext .js,.jsx ./src"
     },
-    "collectCoverage": true,
-    "testURL": "http://localhost"
-  }
+    "pre-commit": [
+        "lint",
+        "test"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/czajkowski/react-async-task.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/czajkowski/react-async-task/issues"
+    },
+    "homepage": "https://github.com/czajkowski/react-async-task#readme",
+    "dependencies": {
+        "prop-types": "^15.6.2",
+        "react": "^16.6.0"
+    },
+    "devDependencies": {
+        "@babel/cli": "^7.1.2",
+        "@babel/core": "^7.1.2",
+        "@babel/plugin-proposal-class-properties": "^7.1.0",
+        "@babel/preset-env": "^7.1.0",
+        "@babel/preset-react": "^7.0.0",
+        "babel-core": "^7.0.0-bridge.0",
+        "babel-eslint": "^10.0.1",
+        "babel-jest": "^23.6.0",
+        "babel-loader": "^8.0.4",
+        "eslint": "^5.7.0",
+        "eslint-config-airbnb": "^17.1.0",
+        "eslint-plugin-babel": "^5.2.1",
+        "eslint-plugin-import": "^2.14.0",
+        "eslint-plugin-jsx-a11y": "^6.1.2",
+        "eslint-plugin-react": "^7.11.1",
+        "jest": "^23.6.0",
+        "pre-commit": "^1.2.2",
+        "react-dom": "^16.6.0",
+        "react-testing-library": "^5.2.3",
+        "webpack": "^4.20.2",
+        "webpack-cli": "^3.1.2"
+    },
+    "jest": {
+        "verbose": true,
+        "coverageThreshold": {
+            "global": {
+                "branches": 85,
+                "functions": 85,
+                "lines": 85,
+                "statements": 85
+            }
+        },
+        "collectCoverage": true,
+        "testURL": "http://localhost"
+    }
 }
