@@ -44,7 +44,7 @@ class App extends Component {
   rejectTask = () => {
     this.setState({
       outcome: "reject",
-      message: "Something went wront!"
+      message: "Something went wrong!"
     });
   };
 
@@ -121,7 +121,7 @@ class App extends Component {
   rejectTask = () => {
     this.setState({
       outcome: "reject",
-      message: "Something went wront!"
+      message: "Something went wrong!"
     });
   };
 
