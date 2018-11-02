@@ -6,8 +6,10 @@
     "scripts": {
         "test": "jest && npm run lint",
         "test:watch": "jest --watch",
+        "build": "rm -rf ./dist && webpack --config webpack.config.js",
         "lint": "eslint --ext .js,.jsx ./src",
-        "lint:fix": "eslint --fix --ext .js,.jsx ./src"
+        "lint:fix": "eslint --fix --ext .js,.jsx ./src",
+        "prepublish": "npm run lint && npm run test && npm run build"
     },
     "pre-commit": [
         "lint",
